@@ -21,5 +21,6 @@ en:
       messages:
         store_credit_minimum_order_not_reach: "Order's item total is less than the minimum allowed (%{amount}) to use store credit."
     promotion_action_types:
-      description: The amount to be given
-      name: Store Credit
+      give_store_credit:
+        description: Enter the amount of credit
+        name: Give Store Credit
