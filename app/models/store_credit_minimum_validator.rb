@@ -8,9 +8,9 @@ class StoreCreditMinimumValidator < ActiveModel::Validator
 
     store_credit_amount = record.instance_variable_get(:@store_credit_amount).to_f
     if store_credit_amount > 0
-      record.errors.add :base, 
-                        Spree.t("errors.messages.store_credit_minimum_order_not_reach", 
-                                amount: number_to_currency(Spree::Config[:use_store_credit_minimum].to_f))
+      amount = number_to_currency(Spree::Config[:use_store_credit_minimum].to_f
+      error_msg = Spree.t("errors.messages.store_credit_minimum_order_not_reach", amount: amount)
+      record.errors.add :base, error_msg)
     end
   end
 end

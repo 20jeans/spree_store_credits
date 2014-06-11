@@ -4,8 +4,8 @@ Spree::Order.class_eval do
   # the check for user? below is to ensure we don't break the
   # admin app when creating a new order from the admin console
   # In that case, we create an order before assigning a user
-  before_save :process_store_credit, :if => "self.user.present? && @store_credit_amount"
-  after_save :ensure_sufficient_credit, :if => "self.user.present? && !self.completed?"
+  before_save :process_store_credit, if: ->{ user.present? && @store_credit_amount }
+  after_save :ensure_sufficient_credit, if: ->{ user.present? && !self.completed? }
 
   validates_with StoreCreditMinimumValidator
 
@@ -50,10 +50,13 @@ Spree::Order.class_eval do
       adjustments.store_credits.destroy_all
     else
       if sca = adjustments.store_credits.first
-        sca.update_attributes({:amount => -(@store_credit_amount)})
+        sca.update_attributes({amount: -(@store_credit_amount)})
       else
         # create adjustment off association to prevent reload
-        sca = adjustments.store_credits.create(:label => Spree.t(:store_credit) , :amount => -(@store_credit_amount))
+        sca = adjustments.store_credits.create({
+          label: Spree.t(:store_credit),
+          amount: -(@store_credit_amount)
+        })
       end
     end
 
@@ -81,7 +84,7 @@ Spree::Order.class_eval do
     end
   end
   # consume users store credit once the order has completed.
-  state_machine.after_transition :to => :complete,  :do => :consume_users_credit
+  state_machine.after_transition to: :complete,  do: :consume_users_credit
 
   # ensure that user has sufficient credits to cover adjustments
   #
@@ -93,5 +96,4 @@ Spree::Order.class_eval do
       update!
     end
   end
-
 end
