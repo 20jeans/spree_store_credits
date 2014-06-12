@@ -33,7 +33,7 @@ Spree::Order.class_eval do
   end
 
   private
-  
+
   def store_credit_processing_required?
     user.present? && (@store_credit_amount || @remove_store_credits)
   end
@@ -51,7 +51,10 @@ Spree::Order.class_eval do
         sca.update_attributes({amount: -(@store_credit_amount)})
       else
         # create adjustment off association to prevent reload
-        sca = adjustments.store_credits.create(label: Spree.t(:store_credit) , amount: -(@store_credit_amount))
+        adjustments.store_credits.create({
+          label: Spree.t(:store_credit),
+          amount: -(@store_credit_amount)
+        })
       end
     end
 
@@ -79,7 +82,7 @@ Spree::Order.class_eval do
     end
   end
   # consume users store credit once the order has completed.
-  state_machine.after_transition to: :complete,  do: :consume_users_credit
+  state_machine.after_transition to: :complete, do: :consume_users_credit
 
   # ensure that user has sufficient credits to cover adjustments
   #
