@@ -4,8 +4,8 @@ class Spree::StoreCredit < ActiveRecord::Base
   validates :user, presence: true
 
   if Spree.user_class
-    belongs_to :user, class_name: Spree.user_class.to_s
+    belongs_to :user, class_name: Spree.user_class.to_s, touch: true
   else
-    belongs_to :user
+    belongs_to :user, touch: true
   end
 end
