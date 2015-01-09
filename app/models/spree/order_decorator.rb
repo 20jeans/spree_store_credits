@@ -47,11 +47,12 @@ Spree::Order.class_eval do
     if @store_credit_amount <= 0 || @remove_store_credits
       adjustments.store_credits.destroy_all
     else
-      if sca = adjustments.store_credits.first
-        sca.update_attributes({amount: -(@store_credit_amount)})
+      if store_credit_adjustment = adjustments.store_credits.first
+        store_credit_adjustment.update_attributes({amount: -(@store_credit_amount)})
       else
         # create adjustment off association to prevent reload
         adjustments.store_credits.create({
+          order: self,
           label: Spree.t(:store_credit),
           amount: -(@store_credit_amount)
         })
