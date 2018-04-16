@@ -17,12 +17,12 @@ Gem::Specification.new do |s|
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.require_paths = ["lib"]
 
-  spree_version = '~> 2.4.0'
-  s.add_dependency 'spree_api', spree_version
-  s.add_dependency 'spree_core', spree_version
-  s.add_dependency 'spree_frontend', spree_version
-  s.add_dependency 'spree_backend', spree_version
-  s.add_development_dependency 'spree_sample', spree_version
+  solidus_version = '= 1.0.0'
+  s.add_dependency 'solidus_api', solidus_version
+  s.add_dependency 'solidus_core', solidus_version
+  s.add_dependency 'solidus_frontend', solidus_version
+  s.add_dependency 'solidus_backend', solidus_version
+  s.add_development_dependency 'solidus_sample', solidus_version
 
   s.add_development_dependency 'capybara', '~> 2.1'
   s.add_development_dependency 'ffaker'
